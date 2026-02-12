@@ -43,6 +43,3 @@ GROUP BY f.origin, f.dest,
 		 avg_arr_delay,
 		 max_delay, 
 		 min_delay
-		 
-		 
-SELECT * FROM airports;
