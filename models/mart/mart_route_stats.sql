@@ -33,9 +33,11 @@ SELECT f.origin AS origin_airport,
 	   min_delay,
 	   SUM(cancelled) AS total_n_cancelled,
 	   SUM(diverted) AS total_n_diverted
-FROM aggregations ag, {{ref('prep_flights')}} f
-JOIN {{ref('prep_airports')}} ai1, {{ref('prep_airports')}} ai2
-ON f.origin = ai1.faa, f.dest = ai2.faa
+FROM aggregations AS ag, {{ref('prep_flights')}} AS f
+JOIN {{ref('prep_airports')}} AS ai1
+ON f.origin = ai1.faa
+JOIN {{ref('prep_airports')}} AS ai2
+ON f.dest = ai2.faa
 GROUP BY f.origin, f.dest, 
 		 ai1.city, ai1.country, ai1.name, 
 		 ai2.city, ai2.country, ai2.name, 
