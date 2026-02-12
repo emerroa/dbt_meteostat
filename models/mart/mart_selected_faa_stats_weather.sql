@@ -29,6 +29,61 @@ GROUP BY dest, origin
 
 SELECT * FROM flights;
 
+-- CTE
+
+WITH departures AS (
+				SELECT origin,
+					   dest, 
+					   COUNT (DISTINCT dest) AS u_dep_connections,
+					   COUNT(*) AS total_f_planned,
+					   SUM(cancelled) AS total_f_cancelled,
+					   SUM(diverted) AS total_f_diverted,
+					   (COUNT (*) - SUM(cancelled)) - SUM(diverted) AS total_actual_dep
+				FROM flights f
+				GROUP BY origin, dest
+				HAVING origin IN ('JFK', 'LAX', 'MIA')
+),
+arrivals AS (
+				SELECT dest,
+					   origin,  
+					   COUNT (DISTINCT origin) AS u_arr_connections,
+					   COUNT(*) AS total_f_planned,
+					   SUM(cancelled) AS total_cancelled,
+					   SUM(diverted) AS total_f_diverted,
+					   (COUNT(*) - SUM(cancelled)) - SUM(diverted) AS total_actual_arr
+				FROM flights f
+				GROUP BY dest, origin
+				HAVING dest IN ('JFK', 'LAX', 'MIA')
+
+),
+aggregations AS (
+				SELECT AVG(u_dep_connections) AS avg_u_dep_con,
+					   AVG(u_arr_connections) AS avg_u_arr_con
+				FROM arrivals, departures
+)
+SELECT ai1.city AS origin_city,
+	   ai1.country AS origin_country,
+	   ai1.name AS origin_name,
+	   u_dep_connections,
+	   avg_u_dep_con,
+	   ai2.city AS dest_city,
+	   ai2.country AS dest_country,
+	   ai2.name AS dest_name,
+	   u_arr_connections, 
+	   avg_u_arr_con
+FROM flights f
+CROSS JOIN aggregations
+JOIN departures d ON f.origin = d.origin AND f.dest = d.dest
+JOIN arrivals a ON f.origin = a.origin AND f.dest = a.dest
+JOIN airports ai1 ON f.origin = ai1.faa
+JOIN airports ai2 ON f.dest = ai2.faa
+GROUP BY origin_city, origin_country, origin_name, 
+		 dest_city, dest_country, dest_name, 
+		 u_dep_connections, u_arr_connections,
+		 avg_u_dep_con, avg_u_arr_con
+
+
+
 /*
  * 
 - only the airports we collected the weather data for
