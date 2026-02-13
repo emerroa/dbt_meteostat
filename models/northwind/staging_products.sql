@@ -11,7 +11,7 @@ WITH columns_formatted AS (
 						   --)) AS unit_description,
 						   unitprice::NUMERIC AS unit_price,
 						   --unitsinstock::INT AS units_in_stock,
-						   u--nitsonorder::INT AS units_on_order,
+						   --unitsonorder::INT AS units_on_order,
 						   reorderlevel AS reorder_level
 					FROM {{source('northwind_data', 'products')}}
 )
