@@ -27,7 +27,7 @@ WHERE dest IN ('JFK', 'LAX', 'MIA')
 GROUP BY dest, origin
 
 
-SELECT * FROM flights;
+SELECT * FROM flights
 
 -- CTE
 
