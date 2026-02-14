@@ -1,14 +1,14 @@
 WITH orders AS (
-				SELECT * FROM {{source('staging_orders')}}
+				SELECT * FROM {{source('northwind_data', 'staging_orders')}}
 ),
 order_details AS (
-				SELECT * FROM {{source('staging_order_details')}}
+				SELECT * FROM {{source('northwind_data', 'staging_order_details')}}
 ),
 products AS (
-				SELECT * FROM {{source('staging_products')}}
+				SELECT * FROM {{source('northwind_data', 'staging_products')}}
 ),
 categories AS (
-				SELECT * FROM {{source('staging_categories')}}
+				SELECT * FROM {{source('northwind_data', 'staging_categories')}}
 ),
 joined AS (
 SELECT o.order_id,
