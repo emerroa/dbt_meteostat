@@ -1,14 +1,14 @@
 WITH orders AS (
-				SELECT * FROM staging_orders
+				SELECT * FROM {{source('staging_orders')}}
 ),
 order_details AS (
-				SELECT * FROM staging_order_details
+				SELECT * FROM {{source('staging_order_details')}}
 ),
 products AS (
-				SELECT * FROM staging_products
+				SELECT * FROM {{source('staging_products')}}
 ),
 categories AS (
-				SELECT * FROM staging_categories
+				SELECT * FROM {{source('staging_categories')}}
 ),
 joined AS (
 SELECT o.order_id,
